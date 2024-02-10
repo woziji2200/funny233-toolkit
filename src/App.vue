@@ -1,30 +1,48 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+    <div>
+        <router-view></router-view>
+    </div>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+@import url(./../node_modules/vue-draggable-resizable/dist/style.css);
+.mx-menu-ghost-host{
+    z-index: 10000 !important;
+}
+.scroll-container:hover::-webkit-scrollbar-thumb{
+    background: #a3a3a3b8;
+}
+.scroll-container:hover::-webkit-scrollbar-track{
+    background: #ffffff1e;
+}
+/* 滚动条整体 */
+.scroll-container::-webkit-scrollbar {
+    height: 3px;
+    width: 3px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+/* 两个滚动条交接处 -- x轴和y轴 */
+.scroll-container::-webkit-scrollbar-corner {
+    background-color: transparent;
 }
 
-nav {
-  padding: 30px;
+/* 滚动条滑块 */
+.scroll-container::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    // -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    background: #a3a3a3b8;
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+}
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+/* 滚动条轨道 */
+.scroll-container::-webkit-scrollbar-track {
+    // -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    background: #ffffff1e;
+}
+
+/* 滚动条两端按钮 */
+.scroll-container::-webkit-scrollbar-button {
 }
 </style>
