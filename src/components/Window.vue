@@ -2,7 +2,7 @@
     <vue-draggable-resizable class="window" @drag-stop="dragstop" :resizeable="!isMaximized" :draggable="!isMaximized"
         :style="zindex" :x="style.left" :y="style.top" :min-width="400" :min-height="300" :w="style.width" :h="style.height"
         @mousedown.stop="mousedown" dragHandle=".header" @draging="">
-        <div class="main" tabindex="0" ref="main" @keydown.stop="close()">
+        <div class="main" tabindex="0" ref="main" @keydown.esc.stop="close()">
             <div class="header">
                 <div>
                     <i :class="`fa fa-${icon}`"></i>
@@ -131,7 +131,7 @@ export default defineComponent({
         this.zindex.opacity = 1
         const main = ref<HTMLElement>(this.$refs.main as HTMLElement)
         main.value.focus()
-        this.$router.push({ name: this.name })
+        // this.$router.push({ name: this.name })
 
         window.addEventListener('resize', () => {
             if (this.isMaximized) {
@@ -171,7 +171,7 @@ export default defineComponent({
 
 .main:focus,
 .main:focus-within {
-    background-color: rgba(0, 0, 0, 0.6);
+    // background-color: rgba(0, 0, 0, 0.6);
     outline: none;
     backdrop-filter: blur(10px);
 
@@ -245,12 +245,12 @@ export default defineComponent({
 
 .router {
     width: 100%;
-    height: calc(100% - 35px);
+    height: 100%;
     overflow: auto;
 }
 .router-div{
     overflow: auto;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 35px);
 }
 </style>

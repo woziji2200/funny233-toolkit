@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <div @contextmenu.prevent="">
         <router-view></router-view>
     </div>
 </template>
 
 <style lang="scss">
-@import url(./../node_modules/vue-draggable-resizable/dist/style.css);
+@import url(./modules/drag.css);
 .mx-menu-ghost-host{
     z-index: 10000 !important;
 }

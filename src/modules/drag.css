@@ -1,0 +1,101 @@
+.vdr {
+    touch-action: none;
+    position: absolute;
+    box-sizing: border-box;
+    border: 1px solid rgba(72, 72, 72, 0.702)
+}
+
+.handle {
+    display: block !important;
+    box-sizing: border-box;
+    position: absolute;
+    background: transparent;
+    /* border: 1px solid #333 */
+}
+
+.handle-tl {
+    top: -2px;
+    left: -2px;
+    height: 5px;
+    width: 5px;
+    cursor: nw-resize;
+    z-index:2;
+}
+
+.handle-tm {
+    top: -2px;
+    height: 5px;
+    width: 100%;
+    left: 0px;
+    /* margin-left: -5px; */
+    cursor: n-resize;
+    z-index: 1;
+}
+
+.handle-tr {
+    top: -2px;
+    right: -2px;
+    height: 5px;
+    width: 5px;
+    cursor: ne-resize;
+    z-index: 2;
+}
+
+.handle-ml {
+    top: 0;
+    /* margin-top: -5px; */
+    height: 100%;
+    width: 5px;
+    left: -2px;
+    cursor: w-resize;
+    z-index: 1;
+}
+
+.handle-mr {
+    top: 0;
+    /* margin-top: -5px; */
+    height: 100%;
+    width: 5px;
+    right: -2px;
+    cursor: e-resize;
+    z-index: 1;
+}
+
+.handle-bl {
+    bottom: -2px;
+    left: -2px;
+    height: 5px;
+    width: 5px;
+    cursor: sw-resize;
+    z-index: 2;
+}
+
+.handle-bm {
+    bottom: -2px;
+    left: 0;
+    /* margin-left: -5px; */
+    height: 5px;
+    width: 100%;
+    cursor: s-resize;
+    z-index: 1;
+}
+
+.handle-br {
+    bottom: -2px;
+    right: -2px;
+    height: 5px;
+    width: 5px;
+    cursor: se-resize;
+    z-index: 2;
+}
+
+@media only screen and (max-width: 768px) {
+    [class*=handle-]:before {
+        content: "";
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        top: -10px;
+        position: absolute
+    }
+}

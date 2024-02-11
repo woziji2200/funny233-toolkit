@@ -3,18 +3,24 @@
         <div class="background-image h-screen w-screen"></div>
 
         <div class="Tasks bg-opacity-30 bg-black w-screen absolute bottom-0 hover:bg-opacity-40">
-
-            <TaskVue icon="house" @click="AppMenuShow = !AppMenuShow" :type="'task'">
-            </TaskVue>
-            <transition-group name="list" tag="TaskVue" class="flex overflow-visible">
-                <TaskVue :key="i.pid" v-for="(i, index) in TasksList" :icon="i.icon.toString()"
-                    @dragstart="TaskDragStart($event, i.pid, index)" @dragenter="TaskDragEnter($event, i.pid, index)"
-                    @dragend="TaskDragEnd($event, i.pid, index)" @dragover="TaskDragOver($event)" draggable="true"
-                    @click="showTask(i.pid)" @contextmenu.prevent="ShowTaskMenu($event, i.pid)" :type="i.type.toString()"
-                    :pid="i.pid" :title="i.title">
+            <div class="scroll-container Tasks2">
+                <TaskVue icon="house" @click="AppMenuShow = !AppMenuShow" :type="'task'">
                 </TaskVue>
-            </transition-group>
+                <transition-group name="list" tag="TaskVue" class="flex overflow-visible">
+                    <TaskVue :key="i.pid" v-for="(i, index) in TasksList" :icon="i.icon.toString()"
+                        @dragstart="TaskDragStart($event, i.pid, index)" @dragenter="TaskDragEnter($event, i.pid, index)"
+                        @dragend="TaskDragEnd($event, i.pid, index)" @dragover="TaskDragOver($event)" draggable="true"
+                        @click="showTask(i.pid)" @contextmenu.prevent="ShowTaskMenu($event, i.pid)"
+                        :type="i.type.toString()" :pid="i.pid" :title="i.title">
+                    </TaskVue>
+                </transition-group>
+            </div>
 
+            <div class="task-time h-full">
+                <span>{{ Time }}</span>
+                <span>{{ YearMonthDay }}</span>
+                <div class="task-time-sd absolute bg-white h-full w-1 right-0 opacity-30 hover:opacity-50" @click="showDesktop()" title="显示桌面"></div>
+            </div>
         </div>
         <div class="windows">
             <!-- <transition-group  name="list" tag="WindowVue" class="flex overflow-visible"> -->
@@ -35,10 +41,10 @@
                     <div class="search">
                         <input type="text" v-model="AppSearch" placeholder="搜索应用">
                     </div>
-                    <div class="menu scroll-container" >
+                    <div class="menu scroll-container">
                         <transition-group>
-                            <TaskVue v-for="i in AppListShow" :icon="i.icon" @click="OpenApp(i)" :type="i.type" :title="i.title"
-                            :pid="i.pid" :key="i.name"></TaskVue>
+                            <TaskVue v-for="i in AppListShow" :icon="i.icon" @click="OpenApp(i)" :type="i.type"
+                                :title="i.title" :pid="i.pid" :key="i.name"></TaskVue>
                         </transition-group>
                     </div>
                 </div>
@@ -46,7 +52,8 @@
         </transition>
 
         <div class="desktop">
-            <!-- <DesktopVue></DesktopVue> -->
+            <TaskVue v-for="i in AppList?.filter(i => i.recommend)" :icon="i.icon" @click="OpenApp(i)" :type="i.type"
+                :title="i.title" :pid="i.pid" :key="i.name" class="desktop-task"></TaskVue>
         </div>
 
 
@@ -65,7 +72,7 @@ import { ref, onBeforeUpdate, onMounted, onUpdated, toRaw, watch, nextTick } fro
 import { newWindowsAdd, newWindows, newWindowsDec } from '../modules/api'
 import ContextMenu from '@imengyu/vue3-context-menu'
 import { routes } from '@/router';
-
+import { getAppList } from '../views/modules/_List';
 
 let TasksList = ref<props.Task[]>([])
 let TaskDragIndex = ref<number>(0)
@@ -82,8 +89,8 @@ const createTask = (icon: String, name: String, title: String) => {
         type: 'task'
     })
     pid++
-    console.log('task',TasksList.value);
-    
+    console.log('task', TasksList.value);
+
 }
 onBeforeUpdate(() => {
     TaskRef.value = []
@@ -91,8 +98,8 @@ onBeforeUpdate(() => {
 
 
 const closeTask = (pid: Number) => {
-    console.log('task',TasksList.value);
-    
+    console.log('task', TasksList.value);
+
     TasksList.value.splice(TasksList.value.findIndex(i => i.pid == pid), 1)
     newWindowsDec()
 }
@@ -136,15 +143,7 @@ const TaskDragOver = (e: Event) => {
 const AppList = ref<props.Task[]>()
 const AppListShow = ref<props.Task[]>()
 const AppSearch = ref('')
-AppList.value = routes.filter(i => { return i.path == '/' })[0].children?.map(i => {
-    return {
-        icon: i.meta?.icon as String || '',
-        name: i.name as String,
-        title: i.meta?.title as String || '',
-        pid: -1,
-        type: i.meta?.type as String || 'task'
-    }
-})
+AppList.value = getAppList()
 AppListShow.value = AppList.value
 console.log('应用列表：', AppList.value);
 const OpenApp = (app: props.Task) => {
@@ -157,14 +156,14 @@ watch(AppSearch, (newVal, oldVal) => {
     if (newVal == '') {
         AppListShow.value = AppList.value
     } else {
-        AppListShow.value = AppList.value?.filter(i => {return i.title.toString().indexOf(newVal) != -1 && i.type == 'task'})
+        AppListShow.value = AppList.value?.filter(i => { return i.title.toString().indexOf(newVal) != -1 && i.type == 'task' })
     }
 })
 
 
 const ShowTaskMenu = (e: MouseEvent, pid: Number) => {
     console.log(111);
-    
+
     ContextMenu.showContextMenu({
         x: e.x,
         y: e.y - 100,
@@ -190,6 +189,11 @@ const ShowTaskMenu = (e: MouseEvent, pid: Number) => {
     })
 }
 
+const showDesktop = () => {
+    TaskRef.value.forEach(i => {
+        (i as any).minimize()
+    })
+}
 
 let AppMenuShow = ref(false)
 const AppMenuClose = (e: KeyboardEvent) => {
@@ -212,8 +216,17 @@ watch(AppMenuShow, (newVal, oldVal) => {
     }
 })
 
+let Time = ref(new Date().toLocaleTimeString())
+setInterval(() => {
+    Time.value = new Date().toLocaleTimeString()
+}, 200);
+let YearMonthDay = ref(new Date().toLocaleDateString())
+setInterval(() => {
+    YearMonthDay.value = new Date().toLocaleDateString()
+}, 1000);
+
 OpenApp({
-    icon: 'fa fa-id-card',
+    icon: 'id-card',
     name: 'Profile',
     title: '自我介绍',
     pid: -1,
@@ -250,9 +263,17 @@ OpenApp({
     backdrop-filter: blur(10px);
     height: 70px;
     overflow-y: hidden;
-
 }
-
+.Tasks2{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    // backdrop-filter: blur(10px);
+    width: calc(100% - 120px);
+    height: 70px;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
 .moving {
     opacity: 0;
 }
@@ -297,11 +318,13 @@ OpenApp({
     padding: 25px 55px;
     outline: none;
 }
-@media screen and (max-width: 700px){
-    .app-menu{
+
+@media screen and (max-width: 700px) {
+    .app-menu {
         padding: 25px 20px;
     }
 }
+
 .v-enter-active,
 .v-leave-active {
     transition: opacity 0.2s;
@@ -345,7 +368,8 @@ OpenApp({
     // height: 100vh;
     // position: absolute;
 }
-.menu{
+
+.menu {
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
@@ -357,10 +381,11 @@ OpenApp({
 }
 
 
-.search{
+.search {
     margin-bottom: 20px;
 }
-.search input{
+
+.search input {
     width: 100%;
     outline: none;
     height: 40px;
@@ -370,7 +395,50 @@ OpenApp({
     border-radius: 20px;
     // border: solid 1px rgba(255, 255, 255, 0.4);
 }
-.search input::placeholder{
+
+.search input::placeholder {
     color: rgba(255, 255, 255, 0.695);
+}
+
+.desktop {
+    margin: 30px;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+@media screen and (max-width: 700px) {
+    .desktop {
+        // margin: 30px 0;
+        flex-direction: row;
+    }
+}
+
+.task-time {
+    position: absolute;
+    right: 0;
+    padding-right: 20px;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    font-size: 14px;
+}
+</style>
+<style>
+.desktop-task .main {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.desktop-task .main:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.desktop-task .des {
+    text-shadow: 0px 0px 5px rgba(0, 0, 0);
 }
 </style>
