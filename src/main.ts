@@ -17,7 +17,5 @@ Vue.component("vue-draggable-resizable", VueDraggableResizable)
 Vue.mount('#app')
 // createApp(App).use(store).use(router).mount('#app')
 
-Vue.config.globalProperties.$windowIndex = 100
-
 
 

@@ -25,6 +25,11 @@
 
 
         </div>
+
+
+        <div>
+            <p class="footer">ICP备案 <a target="_blank" href="https://beian.miit.gov.cn/">鲁ICP备2020046160号</a></p>
+        </div>
     </div>
 </template>
 
@@ -44,6 +49,7 @@ const linkTo = (url: string) => {
 .main {
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-direction: column;
     color: white;
     user-select: none;
@@ -100,6 +106,9 @@ const linkTo = (url: string) => {
 .profile-avatar img:hover {
     transform:rotate(360deg);
 }
+.buttons{
+    margin-bottom: 100px;
+}
 
 @media screen and (max-width: 700px) {
     .profile {
@@ -109,4 +118,15 @@ const linkTo = (url: string) => {
         flex-direction: column;
         align-items: center;
     }
-}</style>
+}
+.footer{
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+    bottom: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 10px;
+    text-align: center;
+    /* width: 100%; */
+}
+</style>

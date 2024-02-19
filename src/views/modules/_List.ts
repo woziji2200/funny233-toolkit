@@ -1,6 +1,6 @@
 const AppList = [
     {icon: '', title: '转换工具', type: 'line', name: 'line'},
-    {icon: 'heart', title: '进制转换', type: 'task', name: 'DecimalConversion', recommend: true},
+    {icon: 'code', title: 'Base系列', type: 'task', name: 'Base', recommend: true},
 
     {icon: '', title: '其他', type: 'line', name: 'line'},
     {icon: 'id-card', title: '自我介绍', type: 'task', name: 'Profile', recommend: true}

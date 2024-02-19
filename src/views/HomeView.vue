@@ -4,7 +4,7 @@
 
         <div class="Tasks bg-opacity-30 bg-black w-screen absolute bottom-0 hover:bg-opacity-40">
             <div class="scroll-container Tasks2">
-                <TaskVue icon="house" @click="AppMenuShow = !AppMenuShow" :type="'task'">
+                <TaskVue icon="home" @click="AppMenuShow = !AppMenuShow" :type="'task'">
                 </TaskVue>
                 <transition-group name="list" tag="TaskVue" class="flex overflow-visible">
                     <TaskVue :key="i.pid" v-for="(i, index) in TasksList" :icon="i.icon.toString()"
@@ -156,7 +156,7 @@ watch(AppSearch, (newVal, oldVal) => {
     if (newVal == '') {
         AppListShow.value = AppList.value
     } else {
-        AppListShow.value = AppList.value?.filter(i => { return i.title.toString().indexOf(newVal) != -1 && i.type == 'task' })
+        AppListShow.value = AppList.value?.filter(i => { return i.title.toString().toLowerCase().indexOf(newVal.toLowerCase()) != -1 && i.type == 'task' })
     }
 })
 
