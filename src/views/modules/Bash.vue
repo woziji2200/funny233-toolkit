@@ -59,7 +59,7 @@ const addNode = async () => {
     })
     nodes.push({ id: nodes.length + 1, show: false, isClose: false, content: markdown.render("```...```"), input: "" })
     try {
-        let msg = await axios.post('http://localhost:8072/api/bash', messages, {
+        let msg = await axios.post('https://funny233.xyz/api/bash', messages, {
             headers: {
                 'Auth': token.value
             }

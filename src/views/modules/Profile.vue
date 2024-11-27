@@ -18,7 +18,7 @@
 
             <div class="flex justify-center gap-2 mt-4 buttons">
                 <ButtonVue @click="linkTo('https://github.com/woziji2200/funny233-toolkit')" title="Github" width="120px"></ButtonVue>
-                <ButtonVue @click="linkTo('https://funny233.xyz')" title="博客" width="120px"></ButtonVue>
+                <ButtonVue @click="linkTo('https://blog.funny233.xyz')" title="博客" width="120px"></ButtonVue>
                 <ButtonVue @click="linkTo('https://status.funny233.xyz')" title="服务器状态" width="120px"></ButtonVue>
             </div>
 
